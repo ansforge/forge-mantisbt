@@ -16,7 +16,7 @@ job "${nomad_namespace}-db" {
     change_mode = "restart"
   }
 
-  group "group-forge-mantis-db" {
+  group "group-mantis-db" {
     count = "1"
     # install only on "data" nodes
     constraint {
