@@ -95,12 +95,12 @@ variable "nomad_namespace" {
 
 variable "vault_acl_policy_name" {
   type    = string
-  default = "forge"
+  default = "${workspace.name}"
 }
 
 variable "vault_secrets_engine_name" {
   type    = string
-  default = "forge/mantisbt"
+  default = "${workspace.name}"
 }
 
 # --- Mantis DB ---
