@@ -19,7 +19,7 @@ runner {
 
 ############## APPs ##############
 
-# --- MariaDB ---
+# --- MantisBT APP ---
 
 app "mantisbt-app" {
   build {
@@ -37,6 +37,7 @@ app "mantisbt-app" {
         nomad_namespace = var.nomad_namespace
         image           = var.webapp_image
         tag             = var.webapp_tag
+        mantisbt_fqdn   = var.mantisbt_fqdn
 
         log_shipper_image = var.log_shipper_image
         log_shipper_tag   = var.log_shipper_tag
@@ -45,7 +46,7 @@ app "mantisbt-app" {
   }
 }
 
-# --- MariaDB ---
+# --- MantisBT DB ---
 
 app "mantisbt-db" {
   build {
@@ -74,7 +75,7 @@ app "mantisbt-db" {
 
 ############## variables ##############
 
-# --- variable common ---
+# --- common ---
 
 # Convention :
 # [NOM-WORKSPACE] = [waypoint projet name] = [nomad namespace name] = [Vault ACL Policies Name] = [Valut Secrets Engine Name]
@@ -102,7 +103,7 @@ variable "vault_secrets_engine_name" {
   default = "forge/mantisbt"
 }
 
-# --- MariaDB ---
+# --- Mantis DB ---
 
 variable "database_image" {
   type    = string
@@ -114,7 +115,7 @@ variable "database_tag" {
   default = "10.4"
 }
 
-# --- Mantis ---
+# --- Mantis App---
 
 variable "webapp_image" {
   type    = string
@@ -124,6 +125,11 @@ variable "webapp_image" {
 variable "webapp_tag" {
   type    = string
   default = "latest"
+}
+
+variable "mantisbt_fqdn" {
+  type    = string
+  default = "mantis.forge.henix.asipsante.fr"
 }
 
 # --- log-shipper ---
