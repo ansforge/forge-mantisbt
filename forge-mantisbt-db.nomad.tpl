@@ -1,4 +1,4 @@
-job "forge/mantisbt-db-${nomad_namespace}" {
+job "${nomad_namespace}-db" {
 
   datacenters = ["${datacenter}"]
   namespace   = "${nomad_namespace}"

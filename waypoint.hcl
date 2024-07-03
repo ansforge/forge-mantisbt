@@ -1,4 +1,4 @@
-project = "forge/mantisbt-${workspace.name}" # exemple : forge/mantisbt-dev
+project = "${workspace.name}" # exemple : forge-mantisbt-dev
 
 labels = { "domaine" = "forge" }
 
@@ -7,10 +7,8 @@ runner {
   enabled = true
   profile = "common-odr"
   data_source "git" {
-    url                         = "https://github.com/ansforge/forge-mantisbt.git"
-    ref                         = "gitref"
-    path                        = "mantisbt-db"
-    ignore_changes_outside_path = true
+    url = "https://github.com/ansforge/forge-mantisbt.git"
+    ref = "gitref"
   }
   poll {
     # à mettre à true pour déployer automatiquement en cas de changement dans la branche
@@ -101,7 +99,7 @@ variable "vault_acl_policy_name" {
 
 variable "vault_secrets_engine_name" {
   type    = string
-  default = "forge/mantisbt-${workspace.name}"
+  default = "forge/mantisbt"
 }
 
 # --- MariaDB ---
