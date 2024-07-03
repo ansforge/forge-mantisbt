@@ -21,7 +21,7 @@ runner {
 
 # --- MariaDB ---
 
-app "forge-mantisbt-app" {
+app "mantisbt-app" {
   build {
     use "docker-ref" {
       image = var.webapp_image
@@ -30,7 +30,7 @@ app "forge-mantisbt-app" {
   }
   deploy {
     use "nomad-jobspec" {
-      jobspec = templatefile("${path.app}/forge-mantisbt-app.nomad.tpl", {
+      jobspec = templatefile("${path.app}/mantisbt-app.nomad.tpl", {
         datacenter                = var.datacenter
         vault_secrets_engine_name = var.vault_secrets_engine_name
 
@@ -47,7 +47,7 @@ app "forge-mantisbt-app" {
 
 # --- MariaDB ---
 
-app "forge-mantisbt-db" {
+app "mantisbt-db" {
   build {
     use "docker-ref" {
       image = var.database_image
@@ -56,7 +56,7 @@ app "forge-mantisbt-db" {
   }
   deploy {
     use "nomad-jobspec" {
-      jobspec = templatefile("${path.app}/forge-mantisbt-db.nomad.tpl", {
+      jobspec = templatefile("${path.app}/mantisbt-db.nomad.tpl", {
         datacenter                = var.datacenter
         vault_acl_policy_name     = var.vault_acl_policy_name
         vault_secrets_engine_name = var.vault_secrets_engine_name
