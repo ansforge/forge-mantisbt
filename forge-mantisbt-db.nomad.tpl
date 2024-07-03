@@ -1,4 +1,5 @@
-job "forge-mantisbt-db" {
+job "${nomad_namespace}-db" {
+
   datacenters = ["${datacenter}"]
   namespace   = "${nomad_namespace}"
 
@@ -11,7 +12,7 @@ job "forge-mantisbt-db" {
   }
 
   vault {
-    policies    = ["forge"]
+    policies    = ["${vault_acl_policy_name}"]
     change_mode = "restart"
   }
 

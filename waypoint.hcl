@@ -1,4 +1,4 @@
-project = "forge/mantisbt-db"
+project = "${workspace.name}" # exemple : forge/mantisbt-dev
 
 labels = { "domaine" = "forge" }
 
@@ -93,9 +93,14 @@ variable "nomad_namespace" {
   default = "${workspace.name}"
 }
 
+variable "vault_acl_policy_name" {
+  type    = string
+  default = "${workspace.name}"
+}
+
 variable "vault_secrets_engine_name" {
   type    = string
-  default = "forge/mantisbt"
+  default = "${workspace.name}"
 }
 
 # --- MariaDB ---
