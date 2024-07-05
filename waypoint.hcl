@@ -120,7 +120,7 @@ variable "database_tag" {
 
 variable "webapp_image" {
   type    = string
-  default = "ans-mantisbt"
+  default = "ans/ans-mantisbt"
 }
 
 variable "webapp_tag" {
