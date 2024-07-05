@@ -33,7 +33,7 @@ job "${nomad_namespace}-app" {
 
     network {
       port "http" {
-        to = 8989
+        to = 80
       }
     }
 
@@ -207,7 +207,7 @@ EOH
           name     = "alive"
           type     = "http"
           path     = "/mantis"
-          interval = "30s"
+          interval = "60s"
           timeout  = "5s"
           port     = "http"
         }
