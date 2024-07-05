@@ -54,9 +54,9 @@ job "${nomad_namespace}-db" {
         env         = true
         data        = <<EOH
 {{with secret "${vault_secrets_engine_name}"}}
-MARIADB_USER="{{.Data.data.mariadb_username}}"
-MARIADB_ROOT_PASSWORD="{{.Data.data.mariadb_rootpassword}}"
-MARIADB_PASSWORD="{{.Data.data.mariadb_password}}"
+MARIADB_USER="{{.Data.data.db_username}}"
+MARIADB_ROOT_PASSWORD="{{.Data.data.db_root_password}}"
+MARIADB_PASSWORD="{{.Data.data.db_password}}"
 MARIADB_DATABASE="{{.Data.data.database_name}}"
 {{end}}
 EOH
