@@ -206,7 +206,7 @@ EOH
         check {
           name     = "alive"
           type     = "http"
-          path     = "/mantis"
+          path     = "/"
           interval = "60s"
           timeout  = "5s"
           port     = "http"

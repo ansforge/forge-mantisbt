@@ -50,9 +50,7 @@ job "${nomad_namespace}-db" {
       leader = true
 
       template {
-        destination = "secrets/file.env"
-        env         = true
-        data        = <<EOH
+        data = <<EOH
 {{with secret "${vault_secrets_engine_name}"}}
 MARIADB_USER="{{.Data.data.db_username}}"
 MARIADB_ROOT_PASSWORD="{{.Data.data.db_root_password}}"
@@ -60,6 +58,9 @@ MARIADB_PASSWORD="{{.Data.data.db_password}}"
 MARIADB_DATABASE="{{.Data.data.database_name}}"
 {{end}}
 EOH
+
+        destination = "secrets/file.env"
+        env         = true
       }
 
       resources {
