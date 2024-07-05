@@ -74,7 +74,7 @@ EOH
 <?php
 {{range service ( print (env "NOMAD_NAMESPACE") "-db") }}
 $g_hostname='{{.Address}}:{{.Port}}';{{end}}
-{{with secret "${vault_secrets_engine_name}/mariadb"}}
+{{with secret "${vault_secrets_engine_name}"}}
 $g_db_type='mysqli';
 $g_database_name='{{.Data.data.database_name}}';
 $g_db_username='{{.Data.data.db_username}}';
