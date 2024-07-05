@@ -211,11 +211,6 @@ EOH
           timeout  = "5s"
           port     = "http"
         }
-        check_restart {
-          limit           = 3
-          grace           = "120s"
-          ignore_warnings = true
-        }
       }
     }
 
