@@ -41,7 +41,7 @@ job "${nomad_namespace}-db" {
         image = "${image}:${tag}"
         ports = ["db"]
         volumes = [
-          "name=$${NOMAD_JOB_NAME},io_priority=high,size=20,repl=2:/var/lib/mysql"
+          "name=$${NOMAD_JOB_NAME},io_priority=high,size=50,repl=1:/var/lib/mysql"
         ]
         volume_driver = "pxd"
       }
