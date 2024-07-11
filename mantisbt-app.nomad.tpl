@@ -104,7 +104,7 @@ $g_logo_image='images/ans_logo.png';
 $g_allow_anonymous_login = OFF;                 
 #$g_anonymous_account = 'guest'; 
 
-$g_auto_set_status_to_assigned='OFF';
+$g_auto_set_status_to_assigned=OFF;
 $g_bug_reopen_status= CONFIRMED;
 $g_use_jpgraph=ON;
 $g_jpgraph_path = '.' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'jpgraph' . DIRECTORY_SEPARATOR;   # dont forget the ending slash!
