@@ -7,12 +7,13 @@ runner {
   enabled = true
   profile = "common-odr"
   data_source "git" {
-    url                         = "https://github.com/ansforge/forge-mantisbt.git"
-    ref                         = "gitref"
-    ignore_changes_outside_path = true
+    url = "https://github.com/ansforge/forge-mantisbt.git"
+    ref = "gitref"
   }
   poll {
-    enabled = false
+    # à mettre à true pour déployer automatiquement en cas de changement dans la branche
+    enabled  = true
+    interval = "60s"
   }
 }
 
