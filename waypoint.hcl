@@ -125,7 +125,7 @@ variable "webapp_image" {
 
 variable "webapp_tag" {
   type    = string
-  default = "2.26.2"
+  default = "2.24.4"
 }
 
 variable "mantisbt_fqdn" {
