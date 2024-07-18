@@ -33,14 +33,13 @@ job "${nomad_namespace}-backup-db" {
       }
 
       resources {
-        cpu    = 20
-        memory = 512
+        cpu    = 500
+        memory = 2048
       }
 
       template {
         # " noop " - take no action (continue running the task)
         change_mode = "noop"
-
         destination = "secrets/backup.sh"
         data        = <<EOH
 #!/bin/bash
@@ -103,7 +102,6 @@ cat $${TMP_FILE} >> $${LOG_FILE}
 # Compte rendu du fichier dump cree par le traitement
 echo -e "(Fin du task 'dump-db')"
 EOH
-
       }
     }
 
