@@ -47,7 +47,7 @@ app "mantisbt-app" {
   }
 }
 
-# --- MantisBT DB ---
+# --- MariaDB ---
 
 app "mantisbt-db" {
   build {
@@ -69,6 +69,32 @@ app "mantisbt-db" {
 
         log_shipper_image = var.log_shipper_image
         log_shipper_tag   = var.log_shipper_tag
+      })
+    }
+  }
+}
+
+# --- Backup DB ---
+
+app "backup-db" {
+  build {
+    use "docker-ref" {
+      image = var.database_image
+      tag   = var.database_tag
+    }
+  }
+  deploy {
+    use "nomad-jobspec" {
+      jobspec = templatefile("${path.app}/backup-db.nomad.tpl", {
+        datacenter                = var.datacenter
+        vault_secrets_engine_name = var.vault_secrets_engine_name
+        vault_acl_policy_name     = var.vault_acl_policy_name
+        nomad_namespace           = var.nomad_namespace
+        image                     = var.database_image
+        tag                       = var.database_tag
+        log_shipper_image         = var.log_shipper_image
+        log_shipper_tag           = var.log_shipper_tag
+        backup_cron               = var.backup_cron
       })
     }
   }
@@ -131,6 +157,12 @@ variable "webapp_tag" {
 variable "mantisbt_fqdn" {
   type    = string
   default = "mantis.forge.henix.asipsante.fr"
+}
+
+# Backup-db
+variable "backup_cron" {
+  type    = string
+  default = "0 04 * * *"
 }
 
 # --- log-shipper ---
