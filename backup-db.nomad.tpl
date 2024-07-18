@@ -67,37 +67,18 @@ DATABASE_NAME={{.Data.data.database_name}}
 {{end}}
 
 # Generation du DUMP de la base
-echo -e "Generation du dump de la base \"$${DUMP_DIR}/$${DUMP_FILE}\"..."
-mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} > "$${DUMP_DIR}/$${DUMP_FILE}" 2>$${TMP_FILE}
+echo -e "Generation du dump de la base \"$${DUMP_DIR}/$${DUMP_FILE}\".gz..."
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip > "$${DUMP_DIR}/$${DUMP_FILE}.gz" 2>$${TMP_FILE}
 RET_CODE=$?
 if [ $${RET_CODE} -ne 0 ]
 then
-    echo -e "[ERROR] - En execution de la commande : mysqldump -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} > \"$${DUMP_DIR}/$${DUMP_FILE}\" !"
+    echo -e "[ERROR] - En execution de la commande : mysqldump -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$DATABASE_PASSWD $${DATABASE_NAME} | gzip > \"$${DUMP_DIR}/$${DUMP_FILE}.gz\" !"
     cat $${TMP_FILE} >> $${LOG_FILE}
     echo -e "Exit code : $${RET_CODE}"
     exit 1
 else
     echo "(OK)"
 fi
-
-cat $${TMP_FILE} >> $${LOG_FILE}
-
-# Zippage du dump de la base
-echo "Zippage du dump, l'enregistrer dans : \"$${DUMP_DIR}/$${ZIP_FILE}\"..."
-cd "$${DUMP_DIR}" && gzip "$${DUMP_FILE}" > $${TMP_FILE} 2>&1
-RET_CODE=$?
-cd "$${HOME_DIR}"
-if [ $${RET_CODE} -ne 0 ]
-then
-    echo -e "[ERROR] - En execution de la commande : gzip \"$${DUMP_FILE}\" ! "
-    cat $${TMP_FILE} >> $${LOG_FILE}
-    echo -e "Exit code : $${RET_CODE}"
-    exit 1
-else
-    echo "(OK)"
-fi
-
-cat $${TMP_FILE} >> $${LOG_FILE}
 
 # Compte rendu du fichier dump cree par le traitement
 echo -e "(Fin du task 'dump-db')"
