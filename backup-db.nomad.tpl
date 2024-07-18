@@ -62,8 +62,8 @@ DATABASE_PORT={{.Port}}
 
 # récupère les secrets dans Vault
 {{with secret "${vault_secrets_engine_name}"}}
-DATABASE_USER={{.Data.data.mariadb_username}}
-DATABASE_PASSWD={{.Data.data.mariadb_password}}
+DATABASE_USER={{.Data.data.db_username}}
+DATABASE_PASSWD={{.Data.data.db_password}}
 DATABASE_NAME={{.Data.data.database_name}}
 {{end}}
 
