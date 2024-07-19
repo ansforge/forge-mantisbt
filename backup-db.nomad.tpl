@@ -48,10 +48,11 @@ TODAY="_$(date "+%Y%m%d_%H%M%S")"
 HOME_DIR="$(pwd)"
 DUMP_DIR="$${NOMAD_ALLOC_DIR}/data"
 LOG_DIR="$${HOME_DIR}"
-DUMP_FILE="mysqldump_mantisbt.sql"
-ZIP_FILE="$${DUMP_FILE}.gz"
+
 LOG_FILE="$${NOMAD_ALLOC_DIR}/logs/mantisbt_dumpdb$${TODAY}.log"
 TMP_FILE="$${NOMAD_ALLOC_DIR}/tmp/mantisbt_dumpdb$${TODAY}.tmp"
+
+DUMP_FILE="mysqldump_mantisbt$${TODAY}.sql.gz"
 
 # récupère l'address de Mariadb dans Consul
 {{range service ( print (env "NOMAD_NAMESPACE") "-db") }}
@@ -64,11 +65,14 @@ DATABASE_PORT={{.Port}}
 DATABASE_USER={{.Data.data.db_username}}
 DATABASE_PASSWD={{.Data.data.db_password}}
 DATABASE_NAME={{.Data.data.database_name}}
+BACKUP_SERVER={{.Data.data.backup_server}}
+TARGET_FOLDER={{.Data.data.backup_folder}}
+SSH_USER={{.Data.data.ssh_user}}
 {{end}}
 
 # Generation du DUMP de la base
-echo -e "Generation du dump de la base \"$${DUMP_DIR}/$${DUMP_FILE}\".gz..."
-mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip > "$${DUMP_DIR}/$${DUMP_FILE}.gz" 2>$${TMP_FILE}
+echo -e "Generation du dump de la base \"$${DUMP_DIR}/$${DUMP_FILE}.gz\" et envoyer sur le serveur de backup ..."
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}.gz' 2 >$${TMP_FILE}
 RET_CODE=$?
 if [ $${RET_CODE} -ne 0 ]
 then
@@ -82,57 +86,6 @@ fi
 
 # Compte rendu du fichier dump cree par le traitement
 echo -e "(Fin du task 'dump-db')"
-EOH
-      }
-    }
-
-    task "send-dump" {
-      driver = "docker"
-      config {
-        image   = "ans/scp-client"
-        command = "bash"
-        args    = ["/secrets/send.sh"]
-      }
-
-      # log-shipper
-      leader = true
-
-      template {
-        change_mode = "noop"
-        destination = "/secrets/id_rsa"
-        perms       = "600"
-        data        = <<EOH
-{{with secret "${vault_secrets_engine_name}"}}{{.Data.data.rsa_private_key}}{{end}}
-        EOH
-      }
-
-      template {
-        change_mode = "noop"
-        destination = "/secrets/send.sh"
-        data        = <<EOH
-#!/bin/bash
-TODAY="_$(date "+%Y%m%d_%H%M%S")"
-DUMP_DIR="$${NOMAD_ALLOC_DIR}/data"
-DUMP_FILE="mysqldump_mantisbt$${TODAY}.sql.gz"
-
-echo -e "Envois fichier dump vers server backup et le renommer à \"$${DUMP_FILE}\" ..."
-{{with secret "${vault_secrets_engine_name}"}}
-BACKUP_SERVER={{.Data.data.backup_server}}
-TARGET_FOLDER={{.Data.data.backup_folder}}
-SSH_USER={{.Data.data.ssh_user}}
-{{end}}
-scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${DUMP_DIR}/mysqldump_mantisbt.sql.gz $${SSH_USER}@$${BACKUP_SERVER}:$${TARGET_FOLDER}/$${DUMP_FILE}
-RET_CODE=$?
-if [ $${RET_CODE} -ne 0 ]
-then
-    echo -e "[ERROR] - En execution de la commande : scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa \"$${DUMP_DIR}\"/mysqldump_mantisbt.sql.gz \"$${SSH_USER}\"@\"$${BACKUP_SERVER}\":\"$${TARGET_FOLDER}\"/\"$${DUMP_FILE}\" ! "
-    echo -e "Exit code : $${RET_CODE}"
-    exit 1
-else
-    echo "(OK)"
-fi
-
-echo "(Fin du Task 'send-dump')"
 EOH
       }
     }
