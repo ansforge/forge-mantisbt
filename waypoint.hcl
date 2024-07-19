@@ -90,8 +90,8 @@ app "backup-db" {
         vault_secrets_engine_name = var.vault_secrets_engine_name
         vault_acl_policy_name     = var.vault_acl_policy_name
         nomad_namespace           = var.nomad_namespace
-        image                     = var.database_image
-        tag                       = var.database_tag
+        image                     = "mariadb-ssh"
+        tag                       = "10.4.8"
         log_shipper_image         = var.log_shipper_image
         log_shipper_tag           = var.log_shipper_tag
         backup_cron               = var.backup_cron
