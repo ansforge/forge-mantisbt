@@ -96,6 +96,7 @@ $g_ldap_follow_referrals =OFF;
 $g_ldap_use_starttls = OFF;
 {{end}}
 
+$g_show_detailed_errors = ON;
 
 #Logo
 $g_logo_image='images/ans_logo.png';
