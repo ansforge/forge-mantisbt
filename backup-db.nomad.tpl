@@ -80,12 +80,12 @@ SSH_USER={{.Data.data.ssh_user}}
 {{end}}
 
 # Generation du DUMP de la base
-echo -e "Generation du dump de la base et envoyer sur le serveur de backup ..."
+echo -e "Generation du dump de la base et envoyer sur le serveur de backup : mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p{DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}' 2 >$${TMP_FILE} ..."
 mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}' 2 >$${TMP_FILE}
 RET_CODE=$?
 if [ $${RET_CODE} -ne 0 ]
 then
-    echo -e "[ERROR] - En execution de la commande : mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p{DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}' 2 >$${TMP_FILE}"
+    echo -e "[ERROR] - En execution de la commande"
     cat $${TMP_FILE} >> $${LOG_FILE}
     echo -e "Exit code : $${RET_CODE}"
     exit 1
