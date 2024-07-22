@@ -65,7 +65,7 @@ EOH
 
       resources {
         cpu    = 500
-        memory = 2048
+        memory = 500
       }
       service {
         name = "$${NOMAD_JOB_NAME}"

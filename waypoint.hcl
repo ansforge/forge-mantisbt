@@ -151,7 +151,7 @@ variable "webapp_image" {
 
 variable "webapp_tag" {
   type    = string
-  default = "2.24.4"
+  default = "2.25.2-php7"
 }
 
 variable "mantisbt_fqdn" {
