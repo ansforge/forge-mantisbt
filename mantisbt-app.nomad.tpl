@@ -72,6 +72,9 @@ EOH
       template {
         data        = <<EOH
 <?php
+
+$g_path='${mantisbt_fqdn}/mantis/'
+
 {{range service ( print (env "NOMAD_NAMESPACE") "-db") }}
 $g_hostname='{{.Address}}:{{.Port}}';{{end}}
 {{with secret "${vault_secrets_engine_name}"}}
