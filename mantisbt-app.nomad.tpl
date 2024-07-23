@@ -157,7 +157,7 @@ $g_handle_bug_threshold = UPDATER;
 $g_update_readonly_bug_threshold = DEVELOPER;
 $g_reminder_receive_threshold = VIEWER;
 # Status color additions
-$g_max_file_size = 220000000;
+$g_max_file_size = 210000000;
 $g_status_colors['new'] =  '#0096FF';
 $g_status_colors['feedback'] =  '#CC3300';
 $g_status_colors['confirmed'] = '#FF663C';
