@@ -81,12 +81,12 @@ SSH_USER={{.Data.data.ssh_user}}
 VERBOSE=1
 
 ### Set bins path ###
-GZIP=$(which gip)
-MYSQL=$(which mysql)
-MYSQLDUMP=$(which mysqldump)
-SSH=$(which ssh)
-MYSQLADMIN=$(which mysqladmin)
-GREP=$(which grep)
+GZIP=$$(which gip)
+MYSQL=$$(which mysql)
+MYSQLDUMP=$$(which mysqldump)
+SSH=$$(which ssh)
+MYSQLADMIN=$$(which mysqladmin)
+GREP=$$(which grep)
 
 #####################################
 ### ----[ No Editing below ]------###
@@ -96,13 +96,13 @@ TIME_FORMAT='%Y%m%d_%H%M%S'
 
 ### Make a backup ###
 backup_mysql_rsnapshot() {
-    local tTime=$(date +"$${TIME_FORMAT}")
+    local tTime=$$(date +"$${TIME_FORMAT}")
     local FILE="$${TARGET_FOLDER}/mysqldump_$${DATABASE_NAME}_$${tTime}.gz"
 
-    [ $VERBOSE -eq 1 ] && echo -n "$${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -pDATABASE_PASSWD $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat >$${FILE}" .."
+    [ $$VERBOSE -eq 1 ] && echo -n "$${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -pDATABASE_PASSWD $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat >$${FILE}" .."
     $${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat > $${FILE}"
-    [ $VERBOSE -eq 1 ] && echo ""
-    [ $VERBOSE -eq 1 ] && echo "*** Backup done [ files wrote to $TARGET_FOLDER] ***"
+    [ $$VERBOSE -eq 1 ] && echo ""
+    [ $$VERBOSE -eq 1 ] && echo "*** Backup done [ files wrote to $TARGET_FOLDER] ***"
 }
 
 ### Die on demand with message ###
@@ -113,18 +113,18 @@ die() {
 
 ### Make sure bins exists.. else die
 verify_bins() {
-    [ ! -x $GZIP ] && die "File $GZIP does not exists. Make sure correct path is set in $0."
-    [ ! -x $MYSQL ] && die "File $MYSQL does not exists. Make sure correct path is set in $0."
-    [ ! -x $MYSQLDUMP ] && die "File $MYSQLDUMP does not exists. Make sure correct path is set in $0."
-    [ ! -x $SSH ] && die "File $SSH does not exists. Make sure correct path is set in $0."
-    [ ! -x $MYSQLADMIN ] && die "File $MYSQLADMIN does not exists. Make sure correct path is set in $0."
-    [ ! -x $GREP ] && die "File $GREP does not exists. Make sure correct path is set in $0."
+    [ ! -x $$GZIP ] && die "File $GZIP does not exists. Make sure correct path is set in $0."
+    [ ! -x $$MYSQL ] && die "File $MYSQL does not exists. Make sure correct path is set in $0."
+    [ ! -x $$MYSQLDUMP ] && die "File $MYSQLDUMP does not exists. Make sure correct path is set in $0."
+    [ ! -x $$SSH ] && die "File $SSH does not exists. Make sure correct path is set in $0."
+    [ ! -x $$MYSQLADMIN ] && die "File $MYSQLADMIN does not exists. Make sure correct path is set in $0."
+    [ ! -x $$GREP ] && die "File $GREP does not exists. Make sure correct path is set in $0."
 }
 
 ### Make sure we can connect to server ... else die
 verify_mysql_connection() {
     $$MYSQLADMIN -u $$DATABASE_USER -h $$DATABASE_IP -p$$DATABASE_PASSWD ping | $$GREP 'alive' >/dev/null
-    [ $? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $0"
+    [ $$? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $$0"
 }
 
 ### main ####
