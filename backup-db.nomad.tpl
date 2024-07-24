@@ -113,12 +113,12 @@ die() {
 
 ### Make sure bins exists.. else die
 verify_bins() {
-    [ ! -x $$GZIP ] && die "File $GZIP does not exists. Make sure correct path is set in $0."
-    [ ! -x $$MYSQL ] && die "File $MYSQL does not exists. Make sure correct path is set in $0."
-    [ ! -x $$MYSQLDUMP ] && die "File $MYSQLDUMP does not exists. Make sure correct path is set in $0."
-    [ ! -x $$SSH ] && die "File $SSH does not exists. Make sure correct path is set in $0."
-    [ ! -x $$MYSQLADMIN ] && die "File $MYSQLADMIN does not exists. Make sure correct path is set in $0."
-    [ ! -x $$GREP ] && die "File $GREP does not exists. Make sure correct path is set in $0."
+    [ ! -x $GZIP ] && die "File $GZIP does not exists. Make sure correct path is set in $0."
+    [ ! -x $MYSQL ] && die "File $MYSQL does not exists. Make sure correct path is set in $0."
+    [ ! -x $MYSQLDUMP ] && die "File $MYSQLDUMP does not exists. Make sure correct path is set in $0."
+    [ ! -x $SSH ] && die "File $SSH does not exists. Make sure correct path is set in $0."
+    [ ! -x $MYSQLADMIN ] && die "File $MYSQLADMIN does not exists. Make sure correct path is set in $0."
+    [ ! -x $GREP ] && die "File $GREP does not exists. Make sure correct path is set in $0."
 }
 
 ### Make sure we can connect to server ... else die
