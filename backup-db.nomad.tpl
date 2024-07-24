@@ -99,10 +99,10 @@ backup_mysql_rsnapshot() {
     local tTime=$(date +"$${TIME_FORMAT}")
     local FILE="$${TARGET_FOLDER}/mysqldump_$${DATABASE_NAME}_$${tTime}.gz"
 
-    [ $$VERBOSE -eq 1 ] && echo -n "$${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -pDATABASE_PASSWD $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat >$${FILE}" .."
+    [ $VERBOSE -eq 1 ] && echo -n "$${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -pDATABASE_PASSWD $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat >$${FILE}" .."
     $${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat > $${FILE}"
-    [ $$VERBOSE -eq 1 ] && echo ""
-    [ $$VERBOSE -eq 1 ] && echo "*** Backup done [ files wrote to $TARGET_FOLDER] ***"
+    [ $VERBOSE -eq 1 ] && echo ""
+    [ $VERBOSE -eq 1 ] && echo "*** Backup done [ files wrote to $TARGET_FOLDER] ***"
 }
 
 ### Die on demand with message ###
@@ -123,7 +123,7 @@ verify_bins() {
 
 ### Make sure we can connect to server ... else die
 verify_mysql_connection() {
-    $$MYSQLADMIN -u $$DATABASE_USER -h $$DATABASE_IP -p$$DATABASE_PASSWD ping | $$GREP 'alive' >/dev/null
+    $MYSQLADMIN -u $DATABASE_USER -h $DATABASE_IP -p$DATABASE_PASSWD ping | $GREP 'alive' >/dev/null
     [ $? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $0"
 }
 
