@@ -96,7 +96,7 @@ TIME_FORMAT='%Y%m%d_%H%M%S'
 
 ### Make a backup ###
 backup_mysql_rsnapshot() {
-    local tTime=$$(date +"$${TIME_FORMAT}")
+    local tTime=$(date +"$${TIME_FORMAT}")
     local FILE="$${TARGET_FOLDER}/mysqldump_$${DATABASE_NAME}_$${tTime}.gz"
 
     [ $$VERBOSE -eq 1 ] && echo -n "$${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -pDATABASE_PASSWD $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat >$${FILE}" .."
