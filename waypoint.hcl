@@ -161,8 +161,8 @@ variable "mantisbt_fqdn" {
 }
 
 variable "mantis_enable_admin" {
-  type    = bool
-  default = false
+  type    = string
+  default = "0" # "0" = disable
 }
 
 # --- Backup-db ---
