@@ -123,7 +123,7 @@ verify_bins() {
 
 ### Make sure we can connect to server ... else die
 verify_mysql_connection() {
-    $MYSQLADMIN -u $DATABASE_USER -h $DATABASE_IP -p$DATABASE_PASSWD ping | $GREP 'alive' >/dev/null
+    $$MYSQLADMIN -u $$DATABASE_USER -h $$DATABASE_IP -p$$DATABASE_PASSWD ping | $$GREP 'alive' >/dev/null
     [ $? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $0"
 }
 
