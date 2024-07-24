@@ -44,9 +44,8 @@ job "${nomad_namespace}-app" {
       leader = true
 
       config {
-        image      = "${image}:${tag}"
-        entrypoint = ["/usr/local/bin/mantisbt-entrypoint.sh"]
-        ports      = ["http"]
+        image = "${image}:${tag}"
+        ports = ["http"]
 
         mount {
           type     = "bind"
