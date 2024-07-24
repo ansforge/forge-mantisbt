@@ -81,12 +81,12 @@ SSH_USER={{.Data.data.ssh_user}}
 VERBOSE=1
 
 ### Set bins path ###
-GZIP=/usr/bin/gzip
-MYSQL=/usr/bin/mysql
-MYSQLDUMP=/usr/bin/mysqldump
-SSH=/usr/bin/ssh
-MYSQLADMIN=/usr/bin/mysqladmin
-GREP=/usr/bin/grep
+GZIP=$(which gip)
+MYSQL=$(which mysql)
+MYSQLDUMP=$(which mysqldump)
+SSH=$(which ssh)
+MYSQLADMIN=$(which mysqladmin)
+GREP=$(which grep)
 
 #####################################
 ### ----[ No Editing below ]------###
