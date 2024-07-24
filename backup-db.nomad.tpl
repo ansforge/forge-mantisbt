@@ -81,7 +81,7 @@ SSH_USER={{.Data.data.ssh_user}}
 VERBOSE=1
 
 ### Set bins path ###
-GZIP=$(which gip)
+GZIP=$(which gzip)
 MYSQL=$(which mysql)
 MYSQLDUMP=$(which mysqldump)
 SSH=$(which ssh)
