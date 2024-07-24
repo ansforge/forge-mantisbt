@@ -81,12 +81,12 @@ SSH_USER={{.Data.data.ssh_user}}
 VERBOSE=1
 
 ### Set bins path ###
-GZIP=$$(which gip)
-MYSQL=$$(which mysql)
-MYSQLDUMP=$$(which mysqldump)
-SSH=$$(which ssh)
-MYSQLADMIN=$$(which mysqladmin)
-GREP=$$(which grep)
+GZIP=$(which gip)
+MYSQL=$(which mysql)
+MYSQLDUMP=$(which mysqldump)
+SSH=$(which ssh)
+MYSQLADMIN=$(which mysqladmin)
+GREP=$(which grep)
 
 #####################################
 ### ----[ No Editing below ]------###
@@ -124,7 +124,7 @@ verify_bins() {
 ### Make sure we can connect to server ... else die
 verify_mysql_connection() {
     $$MYSQLADMIN -u $$DATABASE_USER -h $$DATABASE_IP -p$$DATABASE_PASSWD ping | $$GREP 'alive' >/dev/null
-    [ $$? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $$0"
+    [ $? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $0"
 }
 
 ### main ####
