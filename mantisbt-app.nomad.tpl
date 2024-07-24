@@ -61,7 +61,7 @@ job "${nomad_namespace}-app" {
       template {
         data = <<EOH
 MANTIS_TIMEZONE=Europe/Paris
-MANTIS_ENABLE_ADMIN=1
+MANTIS_ENABLE_ADMIN=${mantis_enable_admin}
 EOH
 
         destination = "secrets/file.env"

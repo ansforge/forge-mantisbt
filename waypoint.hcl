@@ -35,10 +35,11 @@ app "mantisbt-app" {
         vault_acl_policy_name     = var.vault_acl_policy_name
         vault_secrets_engine_name = var.vault_secrets_engine_name
 
-        nomad_namespace = var.nomad_namespace
-        image           = var.webapp_image
-        tag             = var.webapp_tag
-        mantisbt_fqdn   = var.mantisbt_fqdn
+        nomad_namespace     = var.nomad_namespace
+        image               = var.webapp_image
+        tag                 = var.webapp_tag
+        mantisbt_fqdn       = var.mantisbt_fqdn
+        mantis_enable_admin = var.mantis_enable_admin
 
         log_shipper_image = var.log_shipper_image
         log_shipper_tag   = var.log_shipper_tag
@@ -159,7 +160,12 @@ variable "mantisbt_fqdn" {
   default = "mantis.forge.henix.asipsante.fr"
 }
 
-# Backup-db
+variable "mantis_enable_admin" {
+  type    = bool
+  default = false
+}
+
+# --- Backup-db ---
 variable "backup_cron" {
   type    = string
   default = "0 04 * * *"
