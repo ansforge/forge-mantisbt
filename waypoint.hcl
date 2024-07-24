@@ -12,7 +12,7 @@ runner {
   }
   poll {
     # à mettre à true pour déployer automatiquement en cas de changement dans la branche
-    enabled  = true
+    enabled  = false
     interval = "60s"
   }
 }
