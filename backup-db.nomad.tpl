@@ -40,7 +40,7 @@ job "${nomad_namespace}-backup-db" {
       template {
         change_mode = "noop"
         destination = "/secrets/id_rsa"
-        perms       = "600"
+        perms       = "400"
         data        = <<EOH
 {{with secret "${vault_secrets_engine_name}"}}{{.Data.data.rsa_private_key}}{{end}}
         EOH
@@ -53,6 +53,7 @@ job "${nomad_namespace}-backup-db" {
         data        = <<EOH
 #!/bin/bash
 # Variables globales
+TODAY="_$(date "+%Y%m%d_%H%M%S")"
 HOME_DIR="$(pwd)"
 DUMP_DIR="$${NOMAD_ALLOC_DIR}/data"
 LOG_DIR="$${HOME_DIR}"
@@ -78,59 +79,25 @@ TARGET_FOLDER={{.Data.data.backup_folder}}
 SSH_USER={{.Data.data.ssh_user}}
 {{end}}
 
-VERBOSE=1
+# Generation du DUMP de la base
+echo -e "Generation du dump de la base et envoyer sur le serveur de backup : \n
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p*** $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}' ..."
 
-### Set bins path ###
-GZIP=$(which gzip)
-MYSQL=$(which mysql)
-MYSQLDUMP=$(which mysqldump)
-SSH=$(which ssh)
-MYSQLADMIN=$(which mysqladmin)
-GREP=$(which grep)
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}'
 
-#####################################
-### ----[ No Editing below ]------###
-#####################################
-### Default time format ###
-TIME_FORMAT='%Y%m%d_%H%M%S'
+RET_CODE=$?
+if [ $${RET_CODE} -ne 0 ]
+then
+    echo -e "[ERROR] - En execution de la commande"
+    cat $${TMP_FILE} >> $${LOG_FILE}
+    echo -e "Exit code : $${RET_CODE}"
+    exit 1
+else
+    echo "(OK)"
+fi
 
-### Make a backup ###
-backup_mysql_rsnapshot() {
-    local tTime=$(date +"$${TIME_FORMAT}")
-    local FILE="$${TARGET_FOLDER}/mysqldump_$${DATABASE_NAME}_$${tTime}.gz"
-
-    [ $VERBOSE -eq 1 ] && echo -n "$${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -pDATABASE_PASSWD $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat >$${FILE}" .."
-    $${MYSQLDUMP} --single-transaction -u $${DATABASE_USER} -h $${DATABASE_IP} -P $${DATABASE_PORT} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | $${GZIP} -9 | $SSH -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} "cat > $${FILE}"
-    [ $VERBOSE -eq 1 ] && echo ""
-    [ $VERBOSE -eq 1 ] && echo "*** Backup done [ files wrote to $TARGET_FOLDER] ***"
-}
-
-### Die on demand with message ###
-die() {
-    echo "$@"
-    exit 99
-}
-
-### Make sure bins exists.. else die
-verify_bins() {
-    [ ! -x $GZIP ] && die "File $GZIP does not exists. Make sure correct path is set in $0."
-    [ ! -x $MYSQL ] && die "File $MYSQL does not exists. Make sure correct path is set in $0."
-    [ ! -x $MYSQLDUMP ] && die "File $MYSQLDUMP does not exists. Make sure correct path is set in $0."
-    [ ! -x $SSH ] && die "File $SSH does not exists. Make sure correct path is set in $0."
-    [ ! -x $MYSQLADMIN ] && die "File $MYSQLADMIN does not exists. Make sure correct path is set in $0."
-    [ ! -x $GREP ] && die "File $GREP does not exists. Make sure correct path is set in $0."
-}
-
-### Make sure we can connect to server ... else die
-verify_mysql_connection() {
-    $MYSQLADMIN -u $DATABASE_USER -h $DATABASE_IP -p$DATABASE_PASSWD ping | $GREP 'alive' >/dev/null
-    [ $? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $0"
-}
-
-### main ####
-verify_bins
-verify_mysql_connection
-backup_mysql_rsnapshot
+# Compte rendu du fichier dump cree par le traitement
+echo -e "(Fin du task 'dump-db')"
 EOH
       }
     }
