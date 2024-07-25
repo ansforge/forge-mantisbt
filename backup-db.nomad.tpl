@@ -80,10 +80,10 @@ SSH_USER={{.Data.data.ssh_user}}
 {{end}}
 
 # Generation du DUMP de la base
-echo -e "1. Generation du dump de la base :
-mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p*** $${DATABASE_NAME} | gzip -c > $${DUMP_DIR}/$${DUMP_FILE} 2> $${TMP_FILE} ..."
+echo -e "Generation du dump de la base :
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p*** $${DATABASE_NAME} | gzip -c >$${DUMP_DIR}/mysqldump_mantisbt.sql.gz 2>$${TMP_FILE} ..."
 
-mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c > $${DUMP_DIR}/$${DUMP_FILE} 2> $${TMP_FILE}
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c >$${DUMP_DIR}/mysqldump_mantisbt.sql.gz 2>$${TMP_FILE}
 
 RET_CODE=$?
 if [ $${RET_CODE} -ne 0 ]
@@ -92,14 +92,13 @@ then
     echo -e "Exit code : $${RET_CODE}"
     exit 1
 else
-    echo "SUCCES"
+    echo "OK!"
 fi
 
-# L'envois du DUMP
-echo -e "2. Envoyer le dump vers la VM de sauvegarde :
-scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${DUMP_DIR}/$${DUMP_FILE} $${SSH_USER}@$${BACKUP_SERVER}:$${TARGET_FOLDER}/$${DUMP_FILE}"
+echo -e "Envoyer le dump vers la VM de sauvegarde :
+scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${DUMP_DIR}/mysqldump_mantisbt.sql.gz $${SSH_USER}@$${BACKUP_SERVER}:$${TARGET_FOLDER}/$${DUMP_FILE}"
 
-scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${DUMP_DIR}/$${DUMP_FILE} $${SSH_USER}@$${BACKUP_SERVER}:$${TARGET_FOLDER}/$${DUMP_FILE}
+scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${DUMP_DIR}/mysqldump_mantisbt.sql.gz $${SSH_USER}@$${BACKUP_SERVER}:$${TARGET_FOLDER}/$${DUMP_FILE}
 
 RET_CODE=$?
 if [ $${RET_CODE} -ne 0 ]
@@ -108,11 +107,11 @@ then
     echo -e "Exit code : $${RET_CODE}"
     exit 1
 else
-    echo "SUCCES"
+    echo "OK!"
 fi
 
 # Compte rendu du fichier dump cree par le traitement
-echo -e "(Fin du task 'backup-db')"
+echo -e "(Fin du task 'dump-db')"
 EOH
       }
     }
