@@ -33,8 +33,8 @@ job "${nomad_namespace}-backup-db" {
       }
 
       resources {
-        cpu    = 500
-        memory = 2048
+        cpu    = 2000
+        memory = 250
       }
 
       template {
@@ -80,15 +80,30 @@ SSH_USER={{.Data.data.ssh_user}}
 {{end}}
 
 # Generation du DUMP de la base
-echo -e "Generation du dump de la base et envoyer sur le serveur de backup : \n
-mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p*** $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}' ..."
+echo -e "Generation du dump de la base :
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p*** $${DATABASE_NAME} | gzip -c >$${DUMP_DIR}/mysqldump_mantisbt.sql.gz 2>$${TMP_FILE} ..."
 
-mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c | ssh -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${SSH_USER}@$${BACKUP_SERVER} 'cat > $${TARGET_FOLDER}/$${DUMP_FILE}'
+mysqldump -v -h $${DATABASE_IP} -P $${DATABASE_PORT} -u $${DATABASE_USER} -p$${DATABASE_PASSWD} $${DATABASE_NAME} | gzip -c >$${DUMP_DIR}/mysqldump_mantisbt.sql.gz 2>$${TMP_FILE}
 
 RET_CODE=$?
 if [ $${RET_CODE} -ne 0 ]
 then
-    echo -e "[ERROR] - En execution de la commande"
+    echo -e "[ERROR] - En execution de la commande mysqldump"
+    echo -e "Exit code : $${RET_CODE}"
+    exit 1
+else
+    echo "OK!"
+fi
+
+echo -e "Envoyer le dump vers la VM de sauvegarde :
+scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${DUMP_DIR}/mysqldump_mantisbt.sql.gz $${SSH_USER}@$${BACKUP_SERVER}:$${TARGET_FOLDER}/$${DUMP_FILE}"
+
+scp -o StrictHostKeyChecking=accept-new -i /secrets/id_rsa $${DUMP_DIR}/mysqldump_mantisbt.sql.gz $${SSH_USER}@$${BACKUP_SERVER}:$${TARGET_FOLDER}/$${DUMP_FILE}
+
+RET_CODE=$?
+if [ $${RET_CODE} -ne 0 ]
+then
+    echo -e "[ERROR] - En execution de la commande scp"
     echo -e "Exit code : $${RET_CODE}"
     exit 1
 else
