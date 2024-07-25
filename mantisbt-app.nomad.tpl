@@ -97,6 +97,7 @@ $g_ldap_use_starttls = OFF;
 {{end}}
 
 $g_show_detailed_errors = OFF;
+$$g_path = https://${mantisbt_fqdn}
 
 #Logo
 $g_logo_image='images/ans_logo.png';
