@@ -49,7 +49,7 @@ job "${nomad_namespace}-backup-db" {
       template {
         # " noop " - take no action (continue running the task)
         change_mode = "noop"
-        destination = "secrets/backup.sh"
+        destination = "/secrets/backup.sh"
         data        = <<EOH
 #!/bin/bash
 # Variables globales
@@ -89,11 +89,10 @@ RET_CODE=$?
 if [ $${RET_CODE} -ne 0 ]
 then
     echo -e "[ERROR] - En execution de la commande"
-    cat $${TMP_FILE} >> $${LOG_FILE}
     echo -e "Exit code : $${RET_CODE}"
     exit 1
 else
-    echo "(OK)"
+    echo "OK!"
 fi
 
 # Compte rendu du fichier dump cree par le traitement
