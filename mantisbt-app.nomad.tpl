@@ -197,8 +197,8 @@ EOH
       }
 
       resources {
-        cpu    = $ { mantisbt_ressource_cpu }
-        memory = $ { mantisbt_ressource_mem }
+        cpu    = ${mantisbt_ressource_cpu}
+        memory = ${mantisbt_ressource_mem}
       }
 
       service {
