@@ -97,7 +97,7 @@ $g_ldap_use_starttls = OFF;
 {{end}}
 
 $g_show_detailed_errors = OFF;
-$g_session_validation = OFF;
+#$g_session_validation = OFF;
 #$g_path = 'https://${mantisbt_fqdn}/';
 
 #Logo
