@@ -39,7 +39,7 @@ job "${nomad_namespace}-db" {
       driver = "docker"
       config {
         image   = "${image}:${tag}"
-        command = "--max_allowed_packet=65011712"
+        command = "--max_allowed_packet=250M"
         ports   = ["db"]
         volumes = [
           "name=$${NOMAD_JOB_NAME},io_priority=high,size=50,repl=1:/var/lib/mysql"
