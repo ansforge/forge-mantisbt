@@ -38,8 +38,9 @@ job "${nomad_namespace}-db" {
     task "mariadb" {
       driver = "docker"
       config {
-        image = "${image}:${tag}"
-        ports = ["db"]
+        image   = "${image}:${tag}"
+        command = "--max_allowed_packet=65011712"
+        ports   = ["db"]
         volumes = [
           "name=$${NOMAD_JOB_NAME},io_priority=high,size=50,repl=1:/var/lib/mysql"
         ]
