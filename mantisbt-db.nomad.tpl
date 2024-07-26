@@ -65,8 +65,8 @@ EOH
       }
 
       resources {
-        cpu    = 500
-        memory = 1024
+        cpu    = $ { db_ressource_cpu }
+        memory = $ { db_ressource_mem }
       }
       service {
         name = "$${NOMAD_JOB_NAME}"

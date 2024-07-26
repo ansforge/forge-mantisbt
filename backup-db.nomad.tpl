@@ -122,8 +122,8 @@ EOH
         image = "${log_shipper_image}:${log_shipper_tag}"
       }
       resources {
-        cpu    = 100
-        memory = 150
+        cpu    = $ { backup_db_ressource_cpu }
+        memory = $ { backup_db_ressource_mem }
       }
       restart {
         interval = "3m"

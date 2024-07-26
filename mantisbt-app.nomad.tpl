@@ -197,8 +197,8 @@ EOH
       }
 
       resources {
-        cpu    = 2048
-        memory = 5120
+        cpu    = $ { mantisbt_ressource_cpu }
+        memory = $ { mantisbt_ressource_mem }
       }
 
       service {
