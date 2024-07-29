@@ -201,12 +201,12 @@ variable "backup_cron" {
 
 variable "backup_db_ressource_cpu" {
   type    = number
-  default = 100
+  default = 2048
 }
 
 variable "backup_db_ressource_mem" {
   type    = number
-  default = 150
+  default = 512
 }
 
 # --- log-shipper ---
