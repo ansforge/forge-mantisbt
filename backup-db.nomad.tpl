@@ -33,8 +33,8 @@ job "${nomad_namespace}-backup-db" {
       }
 
       resources {
-        cpu    = 2000
-        memory = 250
+        cpu    = ${backup_db_ressource_cpu}
+        memory = ${backup_db_ressource_mem}
       }
 
       template {
@@ -122,8 +122,8 @@ EOH
         image = "${log_shipper_image}:${log_shipper_tag}"
       }
       resources {
-        cpu    = ${backup_db_ressource_cpu}
-        memory = ${backup_db_ressource_mem}
+        cpu    = 100
+        memory = 150
       }
       restart {
         interval = "3m"
