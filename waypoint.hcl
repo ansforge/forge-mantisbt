@@ -2,7 +2,6 @@ project = "${workspace.name}" # exemple : forge-mantisbt-dev
 
 labels = { "domaine" = "forge" }
 
-# https://developer.hashicorp.com/waypoint/docs/waypoint-hcl/runner
 runner {
   enabled = true
   profile = "common-odr"
@@ -180,7 +179,7 @@ variable "mantisbt_fqdn" {
 
 variable "mantis_enable_admin" {
   type    = string
-  default = "0" # "0" = disable
+  default = "0" # "0" = disable; "1" = enable
 }
 
 variable "mantisbt_ressource_cpu" {
