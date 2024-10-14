@@ -127,7 +127,7 @@ variable "nomad_namespace" {
 
 variable "vault_acl_policy_name" {
   type    = string
-  default = "${workspace.name}"
+  default = "forge"
 }
 
 variable "vault_secrets_engine_name" {
