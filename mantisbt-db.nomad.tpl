@@ -12,8 +12,8 @@ job "${nomad_namespace}-db" {
   }
 
   vault {
-    policies    = ["${vault_acl_policy_name}"]
-    change_mode = "restart"
+      policies = ["forge"]
+      change_mode = "restart"
   }
 
   group "group-mantis-db" {
