@@ -171,7 +171,7 @@ variable "webapp_tag" {
 
 variable "mantisbt_fqdn" {
   type    = string
-  default = "mantis.forge.esante.gouv.fr"
+  default = "mantis.esante.gouv.fr"
 }
 
 variable "mantis_enable_admin" {
