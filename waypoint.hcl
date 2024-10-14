@@ -31,9 +31,6 @@ app "mantisbt-app" {
     use "nomad-jobspec" {
       jobspec = templatefile("${path.app}/mantisbt-app.nomad.tpl", {
         datacenter                = var.datacenter
-        vault_acl_policy_name     = var.vault_acl_policy_name
-        vault_secrets_engine_name = var.vault_secrets_engine_name
-
         nomad_namespace        = var.nomad_namespace
         image                  = var.webapp_image
         tag                    = var.webapp_tag
