@@ -132,7 +132,7 @@ variable "vault_acl_policy_name" {
 
 variable "vault_secrets_engine_name" {
   type    = string
-  default = "forge"
+  default = "forge/mantisbt"
 }
 
 # --- Mantis DB ---
