@@ -21,10 +21,7 @@ job "${nomad_namespace}-backup-db" {
     task "dump-db" {
       driver = "docker"
 
-      lifecycle {
-        hook    = "prestart"
-        sidecar = false
-      }
+      leader = true
 
       config {
         image   = "ans/mariadb-ssh:10.4.8"
