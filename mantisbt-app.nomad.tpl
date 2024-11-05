@@ -5,7 +5,7 @@ job "${nomad_namespace}-app" {
   type = "service"
 
   vault {
-    policies    = ["${vault_acl_policy_name}"]
+    policies    = ["${vault_acl_policy_name}","smtp"]
     change_mode = "restart"
   }
 
@@ -127,7 +127,7 @@ $g_from_name = 'Gestion des anomalies Mantis (ne pas répondre)';
 # the return address for bounced mail
 $g_return_path_email    = 'mantis.EXT@esante.gouv.fr';
 $g_phpMailer_method=PHPMAILER_METHOD_SMTP;
-$g_smtp_host='e-ac-smtp01.asip.hst.fluxus.net';
+$g_smtp_host='{{with secret "services-infrastructure/smtp"}}{{.Data.data.host}}{{end}}';
 $g_email_send_using_cronjob = OFF;
 $g_show_realname = ON;
 $g_allow_signup = OFF;
